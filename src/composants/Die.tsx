@@ -1,18 +1,21 @@
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 const Dis  = (props: {value: number, onRoll:Function}) => {
 
     const [value, SetValue] = useState(Math.floor(Math.random()* 7))
 
+    useEffect(() => {
+        props.onRoll(value)
+      }, [value]);
+
     const click_alea = useCallback(() => {
         const rand = Math.floor(Math.random()* 7)
-        props.onRoll(rand) 
         SetValue(rand)
     }, [])
 
     return (
         <div className="Dis" onClick= {click_alea}> 
-            <p className="Roll">Valeur de l'enfant: {value}</p>
+            <p className="Roll">Valeur du dé_1: {value}</p>
         </div>
     )
 }
