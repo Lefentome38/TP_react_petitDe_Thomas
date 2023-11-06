@@ -4,76 +4,34 @@ import Hello_test from "./composants/Hello_test"
 
 function App() {
 
-  const [P_value_1,P_SetValue_1] = useState(0)
-  const [P_value_2,P_SetValue_2] = useState(0)
-  const [P_value_3,P_SetValue_3] = useState(0)
+  const [diceValues,P_SetValue] = useState([0,0,0])
 
-  let [sum, setSum] = useState(0)
-  
-  const diceValues = [P_value_1, P_value_2, P_value_3]
+  const sum = useMemo(() => {
+    return diceValues[0] + diceValues[1] + diceValues[2]
+  },[diceValues]) 
 
-  // for (let i = 0; i < diceValues.length; i++) {
-  //   sum += diceValues[i]
-  // }
-
-  const aaa = (newValue:number) => { 
-    P_SetValue_1(newValue);
-    []
+  const numberChange = (pos: number, newvalue1:number) =>{
+    P_SetValue( prev => {
+      let newvalues = [...prev]
+      newvalues[pos] = newvalue1
+      return newvalues
+    })
   };
-
-  const aaa_1 = (newValue:number) => { 
-    P_SetValue_2(newValue);
-    []
-  };
-
-  const aaa_2 = (newValue:number) => { 
-    P_SetValue_3(newValue);
-    []
-  };
-  
-  // const sum_1 = useMemo(() => {
-  //   setSum(P_value_1 + P_value_2 + P_value_3)
-  // let sum = 0
-  // for(let i = 0; diceValues.length ;i++)
-    // sum++
-    // return sum
-  // },[P_value_1, P_value_2, P_value_3])
-  
-  const sum_2 = useMemo(() => {
-    return P_value_1 + P_value_2 + P_value_3
-  },
-  [ P_value_1, P_value_2, P_value_3])
   
   return (
     <>
       <div className="div_hello">
         <Hello_test/>
-        <p>Valeur du parent_1: {P_value_1}</p>
-        <p>Valeur du parent_2: {P_value_2}</p>
-        <p>Valeur du parent_3: {P_value_3}</p>
+        <p>Valeur du parent_1: {diceValues[0]}</p>
+        <p>Valeur du parent_2: {diceValues[1]}</p>
+        <p>Valeur du parent_3: {diceValues[2]}</p>
       </div>
 
-      <Dis value={P_value_1} onRoll={aaa}/>
-      <Dis value={P_value_2} onRoll={aaa_1}/>
-      <Dis value={P_value_3} onRoll={aaa_2}/>
+      {diceValues.map((_,i) => (
+        <Dis key={i} onRoll={(newVal) => numberChange(i, newVal)} />
+      ))}
 
-      <p>{P_value_1} + {P_value_2} + {P_value_3} = {sum_2} | [ {diceValues.join(', ')} ]</p>
-
-      {/* <table className="diceValues">
-        <head>
-          <tr>
-            <th>...</th>
-          </tr>
-        </head>
-        <body>
-          <tr>
-            <td>{P_value}</td>
-            <td>{P_value}</td>
-            <td>{P_value}</td>
-            <td>{P_value}</td>
-          </tr>
-        </body>
-      </table> */}
+      <p>{diceValues[0]} + {diceValues[1]} + {diceValues[2]} = {sum} | [ {diceValues.join(', ')} ]</p>
     </>
   )
 }
